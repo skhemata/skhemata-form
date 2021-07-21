@@ -1,0 +1,167 @@
+[
+	{
+		"city": "Halle Neustadt",
+		"country_code_iso3166_1": "DE",
+		"country": "Germany",
+		"name": "Halle Neustadt, Saxony-Anhalt, Germany",
+		"id": 666272,
+		"subcountry": "Saxony-Anhalt",
+		"country_id": 48,
+		"city_id": 666272,
+		"subcountry_id": 718
+	},
+	{
+		"country_code_iso3166_1": "DE",
+		"country": "Germany",
+		"city": "Halle (Saale)",
+		"city_id": 644556,
+		"subcountry_id": 718,
+		"subcountry": "Saxony-Anhalt",
+		"country_id": 48,
+		"id": 644556,
+		"name": "Halle (Saale), Saxony-Anhalt, Germany"
+	},
+	{
+		"country_code_iso3166_1": "IN",
+		"country": "India",
+		"city": "Haldia",
+		"city_id": 1095111,
+		"subcountry_id": 1262,
+		"country_id": 91,
+		"subcountry": "West Bengal",
+		"id": 1095111,
+		"name": "Haldia, West Bengal, India"
+	},
+	{
+		"city_id": 1088382,
+		"subcountry_id": 1297,
+		"country_id": 91,
+		"subcountry": "Uttarakhand",
+		"id": 1088382,
+		"name": "Haldwani, Uttarakhand, India",
+		"country_code_iso3166_1": "IN",
+		"country": "India",
+		"city": "Haldwani"
+	},
+	{
+		"city": "Halifax",
+		"country": "United Kingdom",
+		"country_code_iso3166_1": "GB",
+		"id": 829678,
+		"name": "Halifax, England, United Kingdom",
+		"subcountry_id": 991,
+		"city_id": 829678,
+		"country_id": 67,
+		"subcountry": "England"
+	},
+	{
+		"country": "Sweden",
+		"country_code_iso3166_1": "SE",
+		"city": "Halmstad",
+		"subcountry_id": 2915,
+		"city_id": 2188732,
+		"subcountry": "Halland",
+		"country_id": 177,
+		"id": 2188732,
+		"name": "Halmstad, Halland, Sweden"
+	},
+	{
+		"name": "Halesowen, England, United Kingdom",
+		"id": 829684,
+		"subcountry": "England",
+		"country_id": 67,
+		"city_id": 829684,
+		"subcountry_id": 991,
+		"city": "Halesowen",
+		"country_code_iso3166_1": "GB",
+		"country": "United Kingdom"
+	},
+	{
+		"country": "United States",
+		"country_code_iso3166_1": "US",
+		"city": "Haltom City",
+		"subcountry_id": 3603,
+		"city_id": 2494377,
+		"subcountry": "Texas",
+		"country_id": 211,
+		"id": 2494377,
+		"name": "Haltom City, Texas, United States"
+	},
+	{
+		"name": "Halberstadt, Saxony-Anhalt, Germany",
+		"id": 644609,
+		"subcountry": "Saxony-Anhalt",
+		"country_id": 48,
+		"subcountry_id": 718,
+		"city_id": 644609,
+		"city": "Halberstadt",
+		"country": "Germany",
+		"country_code_iso3166_1": "DE"
+	},
+	{
+		"country": "United States",
+		"country_code_iso3166_1": "US",
+		"city": "Hallandale Beach",
+		"subcountry_id": 3592,
+		"city_id": 2432954,
+		"subcountry": "Florida",
+		"country_id": 211,
+		"id": 2432954,
+		"name": "Hallandale Beach, Florida, United States"
+	},
+	{
+		"name": "Halvad, Gujarāt, India",
+		"id": 1088353,
+		"subcountry": "Gujarāt",
+		"country_id": 91,
+		"city_id": 1088353,
+		"subcountry_id": 1284,
+		"city": "Halvad",
+		"country_code_iso3166_1": "IN",
+		"country": "India"
+	},
+	{
+		"name": "Halden, Østfold, Norway",
+		"id": 1689057,
+		"country_id": 149,
+		"subcountry": "Østfold",
+		"city_id": 1689057,
+		"subcountry_id": 2396,
+		"city": "Halden",
+		"country_code_iso3166_1": "NO",
+		"country": "Norway"
+	},
+	{
+		"city": "Haliyal",
+		"country_code_iso3166_1": "IN",
+		"country": "India",
+		"id": 1088366,
+		"name": "Haliyal, Karnataka, India",
+		"city_id": 1088366,
+		"subcountry_id": 1280,
+		"subcountry": "Karnataka",
+		"country_id": 91
+	},
+	{
+		"country_code_iso3166_1": "DE",
+		"country": "Germany",
+		"city": "Halle",
+		"country_id": 48,
+		"subcountry": "North Rhine-Westphalia",
+		"city_id": 644555,
+		"subcountry_id": 722,
+		"name": "Halle, North Rhine-Westphalia, Germany",
+		"id": 644555
+	},
+	{
+		"subcountry_id": 718,
+		"city_id": 644586,
+		"subcountry": "Saxony-Anhalt",
+		"country_id": 48,
+		"id": 644586,
+		"name": "Haldensleben I, Saxony-Anhalt, Germany",
+		"country": "Germany",
+		"country_code_iso3166_1": "DE",
+		"city": "Haldensleben I"
+	}
+]

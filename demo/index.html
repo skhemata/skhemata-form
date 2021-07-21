@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      background: #fafafa;
+    }
+    div.form{
+      padding: 3rem;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+</head>
+<body>
+  <div id="demo"></div>
+
+  <script type="module">
+    import { html, render } from 'lit-html';
+    import '../dist/skhemata-form.js';
+
+    const handleSubmit = (e) => {
+      console.log(`The value of skhemata-form-textbox is ${document.getElementById('txt').value}`)
+      console.log('submitting:')
+      console.log(e.detail.data)
+      console.log(document.getElementById('form').data)
+    };
+
+    render(
+      html`
+      <div class="form">
+        <skhemata-form id="form" @submit=${handleSubmit} @change=${(e) => console.log(e.detail.data)} horizontal>
+          <skhemata-form-textbox class="column"  name="myinput" label="Hello World"></skhemata-form-textbox>
+          <skhemata-form-textbox class="column"  name="email" label="Email" type="email" required></skhemata-form-textbox>
+          <skhemata-form-textbox class="column"  name="password" label="Password" type="password" required></skhemata-form-textbox>
+          <skhemata-form-textbox class="column" label="Test" required minlength=10 name="input2" id="txt"></skhemata-form-textbox>
+          <skhemata-form-textbox class="column" label="Search" required minlength=10 name="searchinput" type="search"></skhemata-form-textbox>
+          <skhemata-form-textarea class="column" label="Area"></skhemata-form-textarea>
+          <skhemata-form-textbox class="column" label="Div" name="divinput"></skhemata-form-textbox>
+
+          <skhemata-form-dropdown label="Dropdown" name="dropdown" placeholder="" required  description="This is a dropdown">
+            <option value="hello">Hello</option>
+            <option value="goodbye">Goodbye</option>
+          </skhemata-form-dropdown> 
+          <skhemata-form-checkbox label="checkbox" name="check" required >Sample checkbox</skhemata-form-checkbox>
+          <skhemata-form-autocomplete label="Auto Complete" name="autocomplete" api=${JSON.stringify({url : 'https://coral.thrinacia.com/api/service/restv1/'})} maplabel="name" mapvalue="id"></skhemata-form-autocomplete>
+          <skhemata-form-button type="submit" title="Submit"></skhemata-form-button>
+
+        </skhemata-form>
+        <div>
+      `,
+      document.querySelector('#demo')
+    );
+  </script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "form": {
+    "error":{
+      "minlength": "Text must be longer",
+      "maxlength": "Text must be shorter",
+      "email": "Not a valid email",
+      "required": "This is required"
+    }
+  }
+}
