@@ -8,16 +8,16 @@ export class SkhemataFormButton extends SkhemataBase {
         .field {
           margin-bottom: 1rem;
           display: block;
-        },
+        }
       `,
     ];
   }
 
   @property({ type: String }) title = '';
 
-  @property({ type: String }) color = '';
-
   @property({ type: String }) type = '';
+
+  @property({ type: Boolean }) isFullwidth = false;
 
   @property({ type: Boolean }) valid = true;
 
@@ -34,8 +34,8 @@ export class SkhemataFormButton extends SkhemataBase {
   render() {
     return html`
       <button
-        class="button is-fullwidth is-primary"
-        style=${this.color ? `background-color: ${this.color}` : ''}
+        class="button ${this.isFullwidth ? 'is-fullwidth' : '' } is-primary"
+        style="background-color: var(--skhemata-form-button-background-color); color: var(--skhemata-form-button-text-color, #fff);"
         @click=${this.handleClick}
       >
         ${this.title}

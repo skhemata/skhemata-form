@@ -96,7 +96,8 @@ export class SkhemataForm extends SkhemataBase {
   }
 
   async firstUpdated() {
-    await super.firstUpdated();
+    await super.firstUpdated(); 
+    console.log(this.inputs)
     for (const input of this.inputs) {
       input.horizontal = this.horizontal;
       input.translations = this.translations;

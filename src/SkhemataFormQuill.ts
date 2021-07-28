@@ -1,6 +1,5 @@
 import { html, css, CSSResult, property } from '@skhemata/skhemata-base';
-// import { SkhemataEditorQuill } from 'skhemata-editor-quill';
-
+import { SkhemataEditorQuill } from '@skhemata/skhemata-editor-quill';
 import { SkhemataFormInput } from './SkhemataFormInput';
 
 export class SkhemataFormQuill extends SkhemataFormInput {
@@ -39,7 +38,7 @@ export class SkhemataFormQuill extends SkhemataFormInput {
 
   static get scopedElements() {
     return {
-      //  'sk-quill': SkhemataEditorQuill,
+      'sk-quill': SkhemataEditorQuill,
     };
   }
 
@@ -50,9 +49,10 @@ export class SkhemataFormQuill extends SkhemataFormInput {
   editor: any;
 
   @property({ type: String })
-  helpMessage = 'Drag and Drop, or Click to Upload Your File';
+  helpMessage = '';
 
   async firstUpdated() {
+    await super.firstUpdated();
     this.editor = this?.shadowRoot?.getElementById('editor');
     this.editor.updateComplete.then(() => {
       this.initQuill();
@@ -60,36 +60,17 @@ export class SkhemataFormQuill extends SkhemataFormInput {
   }
 
   initQuill() {
-    const delta = JSON.parse(this.value)?.ops;
-    this.editor.setContents(delta);
+    if(this.value) {
+      const delta = JSON.parse(this.value)?.ops;
+      this.editor.setContents(delta);
+    }
     this.editor.quill.on('text-change', () => {
       this.value = JSON.stringify(this.editor.quill.getContents());
+      console.log(this.value);
     });
   }
 
   render() {
-    const field = html`
-      <div class="field">
-        ${this.label && !this.horizontal
-          ? html`<label class="label">${this.label}</label>`
-          : null}
-        <div class="control ${this.valid ? '' : 'has-icons-right'}">
-          ${this.description && !this.horizontal
-            ? html`<p>${this.description}</p>`
-            : null}
-          <sk-quill id="editor"></sk-quill>
-          ${!this.valid
-            ? html` <span class="icon is-small is-right">
-                ${this.faTriangle}
-              </span>`
-            : null}
-        </div>
-        ${!this.valid
-          ? html`<p class="help ${this.helpClass}">${this.errorMessage}</p>`
-          : ``}
-      </div>
-    `;
-
     const horizontalFieldLabel = html`
       <div class="field-label column is-one-quarter" style="text-align: left">
         ${this.label ? html`<label class="label">${this.label}</label>` : null}
@@ -97,13 +78,28 @@ export class SkhemataFormQuill extends SkhemataFormInput {
       </div>
     `;
 
-    const horizontalField = html`
-      <div class="field is-horizontal">
-        ${this.label || this.description ? horizontalFieldLabel : null}
-        <div class="field-body column">${field}</div>
+    const field = html`
+      <div class="field  ${this.horizontal ? 'is-horizontal' : ''}">
+        ${(this.label || this.description) && this.horizontal ? horizontalFieldLabel : null}
+        <div class="field-body column">
+          <div class="field">
+            ${this.label && !this.horizontal
+              ? html`<label class="label">${this.label}</label>`
+              : null}
+            <div class="control ${this.valid ? '' : 'has-icons-right'}">
+              ${this.description && !this.horizontal
+                ? html`<p>${this.description}</p>`
+                : null}
+              <sk-quill id="editor"></sk-quill>
+            </div>
+            ${!this.valid
+              ? html`<p class="help ${this.helpClass}">${this.errorMessage}</p>`
+              : ``}
+          </div>
+        </div>
       </div>
     `;
 
-    return this.horizontal ? horizontalField : field;
+    return field;
   }
 }
