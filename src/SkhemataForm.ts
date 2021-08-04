@@ -35,9 +35,6 @@ export class SkhemataForm extends SkhemataBase {
           )
         : [];
 
-      // console.log(element);
-      // console.log(elementChildren);
-
       if (element.name || (!element.name && elementChildren.length < 1)) {
         if (element.tagName && element.tagName !== 'SLOT') {
           elements.push(element);
@@ -123,14 +120,14 @@ export class SkhemataForm extends SkhemataBase {
         this.requestUpdate('data', oldValue);
       });
 
+      // add-row event for skhemata-form-repeat inputs
       if(input.nodeName == 'SKHEMATA-FORM-REPEAT') {
         input.addEventListener('add-row', (e: any) => {
           const repeaterName = e.detail.name;
-          const rowName = e.detail.rowName;
           const rowIndex = e.detail.rowIndex;
 
+          // attaches 'change' event listeners to all the child elements of repeater
           for (const repeatInput of e.detail.nodes) {
-
             repeatInput.addEventListener('change', (event: any) => {
               const { name, value } = event.detail;
               const oldValue = this.data;
@@ -142,12 +139,6 @@ export class SkhemataForm extends SkhemataBase {
               if(!this.data[repeaterName][rowIndex]) {
                 this.data[repeaterName][rowIndex] = {};
               }
-              
-              // if(!this.data[repeaterName].hasOwnProperty(rowName)) {
-              //   this.data[repeaterName][rowName] = {};
-              // }
-
-              // this.data[repeaterName][rowName][name] = value;
 
               this.data[repeaterName][rowIndex][name] = value;
               this.valid = true;
@@ -166,7 +157,6 @@ export class SkhemataForm extends SkhemataBase {
 
         input.addEventListener('remove-row', (e: any) => {
           const repeaterName = e.detail.name;
-          const rowName = e.detail.rowName;
           const rowIndex = e.detail.rowIndex;
 
           console.log(this.data);
@@ -196,7 +186,7 @@ export class SkhemataForm extends SkhemataBase {
   render() {
     return html`
       <div class="${this.columns ? 'columns' : ''}">
-        <slot> </slot>
+        <slot form-data=${this.data}> </slot>
       </div>
     `;
   }

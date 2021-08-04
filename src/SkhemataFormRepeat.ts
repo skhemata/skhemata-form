@@ -1,23 +1,27 @@
-import { html, property, render } from '@skhemata/skhemata-base';
+import { html, property, render, css, CSSResult } from '@skhemata/skhemata-base';
 import { SkhemataFormInput } from './SkhemataFormInput';
 import {repeat} from 'lit-html/directives/repeat';
 
+/**
+ * Repeater component that repeats inputs passed in.
+ */
 export class SkhemataFormRepeat extends SkhemataFormInput {
-  @property({ type: Boolean }) checked: boolean = false;
   @property({ type: Array }) fieldNodes = [];
-  @property({ type: Array }) repeaterRow = [];
+  // @property({ type: Array }) rows = [];
   @property({ type: String }) rowName = "";
+
+  @property({ type: String }) addRowButtonText = "Add Row";
+  @property({ type: String }) removeRowButtonText = "Remove Row";
+
   @property({ type: Number }) rowCount = 0;
+  @property({ type: Number }) rowLimit = 10;
+
 
   get _slottedChildren() {
     const slot = this.shadowRoot.querySelector('slot');
     const childNodes = slot.assignedElements({flatten: true});
-    return Array.prototype.filter.call(childNodes, (node) => node.nodeType == Node.ELEMENT_NODE);
+    return Array.prototype.filter.call(childNodes, (node) => node.nodeType == Node.ELEMENT_NODE && (node.nodeName !== 'SKHEMATA-FORM-REPEAT'));
   }
-
-  // handleSlotchange(e) {
-  //   this.fieldNodes = this._slottedChildren;
-  // }
 
   constructor() {
     super();
@@ -26,23 +30,17 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
 
   async firstUpdated() {
     await super.firstUpdated(); 
-    console.log(this.name);
-    const nodes = Array.prototype.map.call(this._slottedChildren, (node) => {
-      return node.cloneNode(true);
-    });
-
     this.fieldNodes = this._slottedChildren;
-
   }
+
   reset() {
     this.clearError();
-    this.checked = false;
     this.value = false;
   }
 
   validate() {
     this.helpClass = '';
-    if (this.required && this.checked === false) {
+    if (this.required) {
       this.valid = false;
       this.helpClass = 'is-danger';
       this.errorMessage = this.getStr('formErrorRequired');
@@ -58,29 +56,42 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
     );
   }
 
-  handleClick(event: any) {
-    this.clearError();
-    this.checked = event.target.checked;
-    this.value = event.target.checked;
-  }
 
-  addRow(event: any) {
+  /**
+   * Appends a new row of inputs to the end of the component
+   * 
+   * Will need additional refactoring when a better method is found for rendering these
+   */
+  addRow() {
 
+    // Query for current repeater field and generate the nodes
     const mainField = this.shadowRoot.querySelector('.repeater-field');
     const clonedNodes = this.fieldNodes.map(node => node.cloneNode(true));
     let row = document.createElement('div');
-
+  
+    // Generate the index based on the amount of rows
     row.setAttribute('data-row-index', `${this.rowCount}`);
 
-    const rowTitle = `${this.rowName}-${this.rowCount + 1}`;
-    row.setAttribute('data-row-title', rowTitle);
+    // const rowTitle = `${this.rowName}-${this.rowCount + 1}`;
+    // row.setAttribute('data-row-title', rowTitle);
 
+    // Set the title markup for the row
+    const rowTitle = document.createElement('h3');
+    rowTitle.classList.add('row-title')
+    rowTitle.innerHTML = `${this.rowName} #${this.rowCount + 1}`
+
+    // Generate the remaining content to be appended at the end
     const rowContent = html`${
           !this.valid
             ? html`<p class="help ${this.helpClass}">${this.errorMessage}</p>`
             : ``
         }
-        <button @click="${this.removeRow}">Remove row</button>`;
+        <button class="button is-danger" @click="${this.removeRow}">${this.removeRowButtonText}</button>
+        <hr>
+        `;
+
+    row.append(rowTitle);
+
     for (let i = 0; i< clonedNodes.length; i++){
       row.append(clonedNodes[i]);
     }
@@ -89,14 +100,16 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
     mainField.appendChild(row);
     // render(row, <HTMLElement>mainField);
 
-    this.repeaterRow.push(this.fieldNodes)
     this.requestUpdate();
 
+    /**
+     * Dispatch the add-row event
+     * add-row attaches events to newly created inputs
+     */
     this.dispatchEvent(
       new CustomEvent('add-row', {
         detail:{
           name: this.name,
-          rowName: rowTitle,
           rowIndex: this.rowCount,
           nodes: clonedNodes
         },
@@ -108,10 +121,14 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
     this.rowCount ++;
   }
 
+  /**
+   * Removes row based on the index of the row
+
+   */
   removeRow = (e: any) => {
-    console.log(e);
     const parentElement = e.originalTarget.parentElement;
     this.rowCount--;
+
 
     this.dispatchEvent(
       new CustomEvent('remove-row', {
@@ -127,26 +144,28 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
 
     parentElement.remove();
 
-    // reformat the titles
+    // reformat all row titles
     const allInputs = this.shadowRoot.querySelectorAll('[data-row-title]');
     allInputs.forEach((input, i) => {
-      console.log(input);
-      input.setAttribute('data-row-title', `${this.rowName}-${i + 1}`);
-      input.setAttribute('data-row-title', `${this.rowName}-${i}`);
-
+      input.setAttribute('data-row-index', `${i}`);
+      const rowTitle = input.querySelector('.row-title');
+      rowTitle ? rowTitle.innerHTML = `${this.rowName} #${i+1}` : '';
     });
 
-    // this.dispatchEvent(
-    //   new CustomEvent('change', {
-    //     detail: {
-    //       data: 'test',
-    //     },
-    //     composed: true,
-    //     bubbles: true,
-    //   })
-    // );
-
     this.requestUpdate();
+  }
+
+  static get styles() {
+    return <CSSResult[]>[
+      ...super.styles,
+      css`
+      h3 {
+        font-size: 1.5rem;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+    }`
+    ];
   }
 
   render() {
@@ -163,8 +182,12 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
             : null
         }
         <slot style="display: none"></slot>
-       
-        <button @click=${this.addRow}>Add row</button>
+        
+        ${
+          this.rowCount < this.rowLimit ?
+            html`<button class="button is-success" @click=${this.addRow}>${this.addRowButtonText}</button>`
+            : ''
+        }
       </div>
     `;
 
