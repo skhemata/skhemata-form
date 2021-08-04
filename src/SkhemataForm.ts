@@ -34,6 +34,10 @@ export class SkhemataForm extends SkhemataBase {
             node => node.nodeType === Node.ELEMENT_NODE
           )
         : [];
+
+      // console.log(element);
+      // console.log(elementChildren);
+
       if (element.name || (!element.name && elementChildren.length < 1)) {
         if (element.tagName && element.tagName !== 'SLOT') {
           elements.push(element);
@@ -118,6 +122,74 @@ export class SkhemataForm extends SkhemataBase {
         );
         this.requestUpdate('data', oldValue);
       });
+
+      if(input.nodeName == 'SKHEMATA-FORM-REPEAT') {
+        input.addEventListener('add-row', (e: any) => {
+          const repeaterName = e.detail.name;
+          const rowName = e.detail.rowName;
+          const rowIndex = e.detail.rowIndex;
+
+          for (const repeatInput of e.detail.nodes) {
+
+            repeatInput.addEventListener('change', (event: any) => {
+              const { name, value } = event.detail;
+              const oldValue = this.data;
+
+              if(!this.data.hasOwnProperty(repeaterName)) {
+                this.data[repeaterName] = [];
+              }
+
+              if(!this.data[repeaterName][rowIndex]) {
+                this.data[repeaterName][rowIndex] = {};
+              }
+              
+              // if(!this.data[repeaterName].hasOwnProperty(rowName)) {
+              //   this.data[repeaterName][rowName] = {};
+              // }
+
+              // this.data[repeaterName][rowName][name] = value;
+
+              this.data[repeaterName][rowIndex][name] = value;
+              this.valid = true;
+              this.dispatchEvent(
+                new CustomEvent('change', {
+                  detail: {
+                    data: this.data,
+                  },
+                })
+              );
+              this.requestUpdate('data', oldValue);
+            });
+          }
+
+        });
+
+        input.addEventListener('remove-row', (e: any) => {
+          const repeaterName = e.detail.name;
+          const rowName = e.detail.rowName;
+          const rowIndex = e.detail.rowIndex;
+
+          console.log(this.data);
+          const oldValue = this.data;
+  
+          if(this.data.hasOwnProperty(repeaterName)) {
+            if(this.data[repeaterName][rowIndex]) {
+              this.data[repeaterName].splice(rowIndex, 1);
+            }
+          }
+
+          this.valid = true;
+          this.dispatchEvent(
+            new CustomEvent('change', {
+              detail: {
+                data: this.data,
+              },
+            })
+          );
+          this.requestUpdate('data', oldValue);
+
+        });
+      }
     }
   }
 
