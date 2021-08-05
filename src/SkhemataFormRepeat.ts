@@ -183,10 +183,7 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
             : null
         }
         <slot style="display: none"></slot>
-        <slot></slot>
-        <slot></slot>
 
-        
         ${
           this.rowCount < this.rowLimit ?
             html`<button class="button is-success" @click=${this.addRow}>${this.addRowButtonText}</button>`
