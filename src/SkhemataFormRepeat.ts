@@ -19,7 +19,7 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
 
   get _slottedChildren() {
     const slot = this.shadowRoot.querySelector('slot');
-    const childNodes = slot.assignedElements({flatten: true});
+    const childNodes = slot.assignedNodes({flatten: true});
     return Array.prototype.filter.call(childNodes, (node) => node.nodeType == Node.ELEMENT_NODE && (node.nodeName !== 'SKHEMATA-FORM-REPEAT'));
   }
 
@@ -30,6 +30,7 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
 
   async firstUpdated() {
     await super.firstUpdated(); 
+    console.log(this._slottedChildren);
     this.fieldNodes = this._slottedChildren;
   }
 
@@ -68,7 +69,7 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
     const mainField = this.shadowRoot.querySelector('.repeater-field');
     const clonedNodes = this.fieldNodes.map(node => node.cloneNode(true));
     let row = document.createElement('div');
-  
+    console.log(clonedNodes);
     // Generate the index based on the amount of rows
     row.setAttribute('data-row-index', `${this.rowCount}`);
 
@@ -182,6 +183,9 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
             : null
         }
         <slot style="display: none"></slot>
+        <slot></slot>
+        <slot></slot>
+
         
         ${
           this.rowCount < this.rowLimit ?
