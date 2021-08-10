@@ -122,6 +122,7 @@ export class SkhemataForm extends SkhemataBase {
 
       // add-row event for skhemata-form-repeat inputs
       if(input.nodeName == 'SKHEMATA-FORM-REPEAT') {
+        
         input.addEventListener('add-row', (e: any) => {
           const repeaterName = e.detail.name;
           const rowIndex = e.detail.rowIndex;
@@ -142,6 +143,14 @@ export class SkhemataForm extends SkhemataBase {
 
               this.data[repeaterName][rowIndex][name] = value;
               this.valid = true;
+              input.dispatchEvent(
+                new CustomEvent('update-data', {
+                  detail: {
+                    data: this.data,
+                  },
+                })
+              );
+
               this.dispatchEvent(
                 new CustomEvent('change', {
                   detail: {
@@ -169,6 +178,13 @@ export class SkhemataForm extends SkhemataBase {
           }
 
           this.valid = true;
+          input.dispatchEvent(
+            new CustomEvent('update-data', {
+              detail: {
+                data: this.data,
+              },
+            })
+          );
           this.dispatchEvent(
             new CustomEvent('change', {
               detail: {

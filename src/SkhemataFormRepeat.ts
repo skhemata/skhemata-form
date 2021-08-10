@@ -1,37 +1,64 @@
-import { html, property, render, css, CSSResult } from '@skhemata/skhemata-base';
+import { html, property, render, css, CSSResult, unsafeHTML } from '@skhemata/skhemata-base';
 import { SkhemataFormInput } from './SkhemataFormInput';
-import {repeat} from 'lit-html/directives/repeat';
+import { SkhemataFormTextbox } from './SkhemataFormTextbox';
+import { SkhemataFormTextarea } from './SkhemataFormTextarea';
+import { SkhemataFormDropdown } from './SkhemataFormDropdown';
+
+import { SkhemataFormDropzone } from './SkhemataFormDropzone';
+import { SkhemataFormButton } from './SkhemataFormButton';
+import { SkhemataFormQuill } from './SkhemataFormQuill';
+import { SkhemataFormCheckbox } from './SkhemataFormCheckbox';
+import { SkhemataFormToggle } from './SkhemataFormToggle';
+
 
 /**
  * Repeater component that repeats inputs passed in.
  */
 export class SkhemataFormRepeat extends SkhemataFormInput {
-  @property({ type: Array }) fieldNodes = [];
-  // @property({ type: Array }) rows = [];
+  fieldNodes = [];
+  rowData = [];
   @property({ type: String }) rowName = "";
-
   @property({ type: String }) addRowButtonText = "Add Row";
   @property({ type: String }) removeRowButtonText = "Remove Row";
-
-  @property({ type: Number }) rowCount = 0;
   @property({ type: Number }) rowLimit = 10;
+  @property({ type: Array }) repeatedFields = [];
 
+  allowedComponents = {
+    textbox: 'skhemata-form-textbox', 
+    textarea: 'skhemata-form-textarea', 
+    dropdown: 'skhemata-form-dropdown', 
+    dropzone: 'skhemata-form-dropzone', 
+    button: 'skhemata-form-button', 
+    quill: 'skhemata-form-quill', 
+    checkbox: 'skhemata-form-checkbox', 
+    toggle: 'skhemata-form-toggle', 
+  };
 
-  get _slottedChildren() {
-    const slot = this.shadowRoot.querySelector('slot');
-    const childNodes = slot.assignedNodes({flatten: true});
-    return Array.prototype.filter.call(childNodes, (node) => node.nodeType == Node.ELEMENT_NODE && (node.nodeName !== 'SKHEMATA-FORM-REPEAT'));
+  static get scopedElements(){
+    return {
+      'skhemata-form-textbox': SkhemataFormTextbox,
+      'skhemata-form-textarea': SkhemataFormTextarea,
+      'skhemata-form-dropdown': SkhemataFormDropdown,
+      'skhemata-form-dropzone': SkhemataFormDropzone,
+      'skhemata-form-button': SkhemataFormButton,
+      'skhemata-form-quill': SkhemataFormQuill,
+      'skhemata-form-checkbox': SkhemataFormCheckbox,
+      'skhemata-form-toggle': SkhemataFormToggle,
+    }
   }
 
   constructor() {
     super();
     this.value = false;
+
+    this.addEventListener('update-data', (e: any) => {
+      this.rowData = e.detail.data[this.name];
+      console.log(this.rowData);
+    });
   }
 
   async firstUpdated() {
     await super.firstUpdated(); 
-    console.log(this._slottedChildren);
-    this.fieldNodes = this._slottedChildren;
   }
 
   reset() {
@@ -64,94 +91,56 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
    * Will need additional refactoring when a better method is found for rendering these
    */
   addRow() {
-
-    // Query for current repeater field and generate the nodes
-    const mainField = this.shadowRoot.querySelector('.repeater-field');
-    const clonedNodes = this.fieldNodes.map(node => node.cloneNode(true));
-    let row = document.createElement('div');
-    console.log(clonedNodes);
-    // Generate the index based on the amount of rows
-    row.setAttribute('data-row-index', `${this.rowCount}`);
-
-    // const rowTitle = `${this.rowName}-${this.rowCount + 1}`;
-    // row.setAttribute('data-row-title', rowTitle);
-
-    // Set the title markup for the row
-    const rowTitle = document.createElement('h3');
-    rowTitle.classList.add('row-title')
-    rowTitle.innerHTML = `${this.rowName} #${this.rowCount + 1}`
-
-    // Generate the remaining content to be appended at the end
-    const rowContent = html`${
-          !this.valid
-            ? html`<p class="help ${this.helpClass}">${this.errorMessage}</p>`
-            : ``
-        }
-        <button class="button is-danger" @click="${this.removeRow}">${this.removeRowButtonText}</button>
-        <hr>
-        `;
-
-    row.append(rowTitle);
-
-    for (let i = 0; i< clonedNodes.length; i++){
-      row.append(clonedNodes[i]);
-    }
-    render(rowContent, row);
-
-    mainField.appendChild(row);
-    // render(row, <HTMLElement>mainField);
-
+    this.rowData.push({});
+  
     this.requestUpdate();
+  }
 
-    /**
-     * Dispatch the add-row event
-     * add-row attaches events to newly created inputs
-     */
-    this.dispatchEvent(
-      new CustomEvent('add-row', {
-        detail:{
-          name: this.name,
-          rowIndex: this.rowCount,
-          nodes: clonedNodes
-        },
-        composed: true,
-        bubbles: true,
-      })
-    );
+  
+  updated() {
+    const currentNodes = this.shadowRoot.querySelectorAll('[skhemata-input]');
 
-    this.rowCount ++;
+    if(currentNodes.length > this.fieldNodes.length) {
+      // Filter out previous nodes from currentNodes
+      const newNodes = Array.from(currentNodes).filter(node => !this.fieldNodes.includes(node));
+      /**
+       * Dispatch the add-row event
+       * add-row attaches events to newly created inputs
+      */
+      this.dispatchEvent(
+        new CustomEvent('add-row', {
+          detail:{
+            name: this.name,
+            rowIndex: this.rowData.length - 1,
+            nodes: newNodes
+          },
+          composed: true,
+          bubbles: true,
+        })
+      );
+    }
+
+    this.fieldNodes = Array.from(currentNodes);
   }
 
   /**
    * Removes row based on the index of the row
-
    */
-  removeRow = (e: any) => {
-    const parentElement = e.originalTarget.parentElement;
-    this.rowCount--;
-
+  removeRow(event: any) {
+    console.log(event.originalTarget.parentNode.dataset.rowNum);
+    // this.rowData.splice(index, 1);
+    // console.log(this.rowData);
 
     this.dispatchEvent(
       new CustomEvent('remove-row', {
         detail:{
           name: this.name,
-          rowName: parentElement.dataset.rowTitle,
-          rowIndex: parentElement.dataset.rowIndex
+          rowIndex: event.originalTarget.parentNode.dataset.rowNum
         },
         composed: true,
         bubbles: true,
       })
     );
-
-    parentElement.remove();
-
-    // reformat all row titles
-    const allInputs = this.shadowRoot.querySelectorAll('[data-row-title]');
-    allInputs.forEach((input, i) => {
-      input.setAttribute('data-row-index', `${i}`);
-      const rowTitle = input.querySelector('.row-title');
-      rowTitle ? rowTitle.innerHTML = `${this.rowName} #${i+1}` : '';
-    });
 
     this.requestUpdate();
   }
@@ -169,6 +158,13 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
     ];
   }
 
+  renderComponent (name: String, attributes: Object, value: any = null) {
+    const templateString = `<${name} ${Object.keys(attributes).map(key => {
+      return `${key}=${attributes[key]}`;
+    }).join(' ')} value=${value} skhemata-input></${name}>`;
+    return html`${unsafeHTML(templateString)}`;
+  }
+
   render() {
     const field = html`
       <div class="repeater-field field">
@@ -182,10 +178,19 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
             ? html`<p>${this.description}</p>`
             : null
         }
-        <slot style="display: none"></slot>
 
         ${
-          this.rowCount < this.rowLimit ?
+          this.rowData.map((data, i) => html`<div data-row-num=${i}>
+            <h3>${this.rowName} #${i + 1}</h3>
+          ${
+            this.repeatedFields.map( (field, j) =>  
+              html`${field.type in this.allowedComponents ? this.renderComponent(this.allowedComponents[field.type], field.attributes, data[field.attributes.name]) : ''}`
+            )
+          }<button class="button is-danger" @click=${(e) => this.removeRow(e)}>${this.removeRowButtonText}</button><hr></div>`)
+        }
+
+        ${
+          this.rowData.length < this.rowLimit ?
             html`<button class="button is-success" @click=${this.addRow}>${this.addRowButtonText}</button>`
             : ''
         }
