@@ -7,6 +7,27 @@ export default {
   component: 'skhemata-blog',
   argTypes: {
     ...argTypes,
+    repeatedFields: {
+      control: 'Object',
+      description: 'Array of inputs to be repeated `type` is the type of input to be used. `attributes` is the attributes that are tied to the input to function. `content` is what will be fed into the `<slot></slot>` element of the component.  This is the list of allowed `types` that correspond to components: `[textbox, textarea, dropdown, dropzone, button, quill, checkbox, toggle]`',
+      table: {
+        category: 'HTML Attributes',
+        type: {
+          summary: 'object',
+          detail: JSON.stringify(
+            [
+              {
+                type: 'string',
+                attributes: 'object',
+                content: 'string',     
+              }
+            ],
+            null,
+            2
+          ),
+        },
+      },
+    },
     rowName: {
       control: 'text',
       description: 'Base title of a new row.  Whenever a new row is added, the title will be "rowName" #number',
@@ -42,16 +63,53 @@ export default {
   },
 };
 
-const Template: Story<ArgTypes> = ({ label = 'My Repeater' }: ArgTypes) => html`
+
+const defaultArgs = {
+  repeatedFields: [
+    {
+      type: 'toggle',
+      attributes: {
+        name: "toggle",
+        description: "sample toggle",
+        onText: "ON",
+        offText:"OFF",
+        label: 'Toggle',
+        required: true
+      }
+    },
+    {
+      type: 'checkbox',
+      attributes: {
+        name: "check",
+        description: "sample checkbox",
+        onText: "ON",
+        offText:"OFF",
+        label: 'Checkbox',
+        required: true
+      }    
+    },
+    {
+      type: 'dropdown',
+      attributes: {
+        name: "dropdown",
+        description: "sample text",
+        label: 'dropdown',
+        required: true,
+      },
+      content: '<option value="hello">Hello</option><option value="goodbye">Goodbye</option>'
+    }
+  ]
+};
+const Template: Story<ArgTypes> = ({ label = 'My Repeater', repeatedFields = defaultArgs.repeatedFields}: ArgTypes) => html`
+  <skhemata-form>
     <skhemata-form-repeat
       .label=${label}
       rowName="Title Example"
       addRowButtonText="Add Example"
       removeRowButtonText="Remove example"
       rowLimit="3"
+      .repeatedFields=${repeatedFields}
     >
-      <skhemata-form-checkbox label="checkbox" name="check" description="describe" required >Sample checkbox</skhemata-form-checkbox>
-      <skhemata-form-toggle label="toggle" name="toggle" onText="ON" offText="OFF" required >Sample toggle</skhemata-form-toggle>
     </skhemata-form-repeat>
   </skhemata-form>
 `;
@@ -59,22 +117,56 @@ const Template: Story<ArgTypes> = ({ label = 'My Repeater' }: ArgTypes) => html`
 export const Example = Template.bind({});
 Example.args = {
   label: 'My Repeater',
+  repeatedFields: [
+    {
+      type: 'toggle',
+      attributes: {
+        name: "toggle",
+        description: "sample toggle",
+        onText: "ON",
+        offText:"OFF",
+        label: 'Toggle',
+        required: true
+      }
+    },
+    {
+      type: 'checkbox',
+      attributes: {
+        name: "check",
+        description: "sample checkbox",
+        onText: "ON",
+        offText:"OFF",
+        label: 'Checkbox',
+        required: true
+      }    
+    },
+    {
+      type: 'dropdown',
+      attributes: {
+        name: "dropdown",
+        description: "sample text",
+        label: 'dropdown',
+        required: true,
+      },
+      content: '<option value="hello">Hello</option><option value="goodbye">Goodbye</option>'
+    }
+  ]
 };
 Example.parameters = {
   docs: {
     source: {
       code: `
+      <skhemata-form>
       <skhemata-form-repeat
         label="${Example.args.label}"
         rowName="Title Example"
         addRowButtonText="Add Example"
         removeRowButtonText="Remove example"
         rowLimit="3"
-
+        .repeatedFields=${Example.args.repeatedFields}
       >
-      <skhemata-form-checkbox label="checkbox" name="check" description="describe" required >Sample checkbox</skhemata-form-checkbox>
-      <skhemata-form-toggle label="toggle" name="toggle" onText="ON" offText="OFF" required >Sample toggle</skhemata-form-toggle>
       </skhemata-form-repeat>
+      </skhemata-form>
       `,
     },
   },

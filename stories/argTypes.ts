@@ -17,6 +17,7 @@ export interface ArgTypes {
   errorMessage?: string;
   valid?: boolean;
   translationData?: any;
+  repeatedFields: any;
 }
 
 export const argTypes = {

@@ -78,7 +78,6 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
    * Removes row based on the index of the row
    */
   removeRow(event: any) {
-    console.log(event);
     // remove-row splices the appropriate data from skhemata-form data property
     this.dispatchEvent(
       new CustomEvent('remove-row', {
@@ -98,6 +97,9 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
     return <CSSResult[]>[
       ...super.styles,
       css`
+      :host {
+        width: 100%;
+      }
       h3 {
         font-size: 1.5rem;
         margin-top: 0.5rem;
