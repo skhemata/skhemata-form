@@ -5,6 +5,7 @@ import { ArgTypes, Story } from './argTypes';
 interface ButtonArgTypes extends ArgTypes {
   title?: string;
   isFullwidth?: boolean;
+  isLoading?: boolean;
   skhemataFormButtonBackgroundColor?: string;
   skhemataFormButtonTextColor?: string;
 }
@@ -25,6 +26,15 @@ export default {
       control: 'boolean',
       name: 'isfullwidth',
       description: 'Sets the width of the button',
+      table: {
+        type: 'boolean',
+        category: 'HTML Attributes',
+      },
+    },
+    isLoading: {
+      control: 'boolean',
+      name: 'isloading',
+      description: 'Sets a loading spinner on the button',
       table: {
         type: 'boolean',
         category: 'HTML Attributes',
@@ -70,6 +80,7 @@ export default {
 const Template: Story<ButtonArgTypes> = ({
   title = 'My Button',
   isFullwidth = false,
+  isLoading = false,
   skhemataFormButtonBackgroundColor,
   skhemataFormButtonTextColor,
 }: ButtonArgTypes) => html`
@@ -82,6 +93,7 @@ const Template: Story<ButtonArgTypes> = ({
     <skhemata-form-button
       .title=${title}
       .isFullwidth=${isFullwidth}
+      .isLoading=${isLoading}
     ></skhemata-form-button>
 `;
 
