@@ -39,6 +39,11 @@ export class SkhemataFormCheckbox extends SkhemataFormInput {
     this.value = event.target.checked;
   }
 
+  updated() {
+    const checkbox = this.shadowRoot.querySelector('[type=checkbox]');
+    checkbox['checked'] = this.value;
+  }
+
   render() {
     const field = html`
       <div class="field">
@@ -52,7 +57,7 @@ export class SkhemataFormCheckbox extends SkhemataFormInput {
               ? html`<p>${this.description}</p>`
               : null
           }
-          <input type="checkbox" @click=${this.handleClick} />
+          <input type="checkbox" @click=${this.handleClick}/>
           <slot></slot>
         </label>
         ${

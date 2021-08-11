@@ -121,25 +121,25 @@ export class SkhemataForm extends SkhemataBase {
       });
 
       // add-row event for skhemata-form-repeat inputs
-      if(input.nodeName == 'SKHEMATA-FORM-REPEAT') {
+      if(input.type == 'SKHEMATA-FORM-REPEAT') {
         
         input.addEventListener('add-row', (e: any) => {
           const repeaterName = e.detail.name;
           const rowIndex = e.detail.rowIndex;
+
+          if(!this.data.hasOwnProperty(repeaterName)) {
+            this.data[repeaterName] = [];
+          }
+
+          if(!this.data[repeaterName][rowIndex]) {
+            this.data[repeaterName][rowIndex] = {};
+          }
 
           // attaches 'change' event listeners to all the child elements of repeater
           for (const repeatInput of e.detail.nodes) {
             repeatInput.addEventListener('change', (event: any) => {
               const { name, value } = event.detail;
               const oldValue = this.data;
-
-              if(!this.data.hasOwnProperty(repeaterName)) {
-                this.data[repeaterName] = [];
-              }
-
-              if(!this.data[repeaterName][rowIndex]) {
-                this.data[repeaterName][rowIndex] = {};
-              }
 
               this.data[repeaterName][rowIndex][name] = value;
               this.valid = true;
@@ -168,7 +168,6 @@ export class SkhemataForm extends SkhemataBase {
           const repeaterName = e.detail.name;
           const rowIndex = e.detail.rowIndex;
 
-          console.log(this.data);
           const oldValue = this.data;
   
           if(this.data.hasOwnProperty(repeaterName)) {

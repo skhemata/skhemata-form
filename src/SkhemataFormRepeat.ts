@@ -15,14 +15,17 @@ import { SkhemataFormToggle } from './SkhemataFormToggle';
  * Repeater component that repeats inputs passed in.
  */
 export class SkhemataFormRepeat extends SkhemataFormInput {
-  fieldNodes = [];
-  rowData = [];
   @property({ type: String }) rowName = "";
   @property({ type: String }) addRowButtonText = "Add Row";
   @property({ type: String }) removeRowButtonText = "Remove Row";
   @property({ type: Number }) rowLimit = 10;
   @property({ type: Array }) repeatedFields = [];
+  type = "SKHEMATA-FORM-REPEAT";
 
+  fieldNodes = [];
+  rowData = [];
+
+  // Pair all component types with appropriate component
   allowedComponents = {
     textbox: 'skhemata-form-textbox', 
     textarea: 'skhemata-form-textarea', 
@@ -51,9 +54,9 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
     super();
     this.value = false;
 
+    // Event listener that updates local state based on skhemata-form state
     this.addEventListener('update-data', (e: any) => {
       this.rowData = e.detail.data[this.name];
-      console.log(this.rowData);
     });
   }
 
@@ -61,34 +64,9 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
     await super.firstUpdated(); 
   }
 
-  reset() {
-    this.clearError();
-    this.value = false;
-  }
-
-  validate() {
-    this.helpClass = '';
-    if (this.required) {
-      this.valid = false;
-      this.helpClass = 'is-danger';
-      this.errorMessage = this.getStr('formErrorRequired');
-      this.requestUpdate();
-    }
-
-    this.dispatchEvent(
-      new CustomEvent('is-valid', {
-        detail: { valid: this.valid },
-        bubbles: true,
-        composed: true,
-      })
-    );
-  }
-
-
   /**
    * Appends a new row of inputs to the end of the component
    * 
-   * Will need additional refactoring when a better method is found for rendering these
    */
   addRow() {
     this.rowData.push({});
@@ -96,41 +74,12 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
     this.requestUpdate();
   }
 
-  
-  updated() {
-    const currentNodes = this.shadowRoot.querySelectorAll('[skhemata-input]');
-
-    if(currentNodes.length > this.fieldNodes.length) {
-      // Filter out previous nodes from currentNodes
-      const newNodes = Array.from(currentNodes).filter(node => !this.fieldNodes.includes(node));
-      /**
-       * Dispatch the add-row event
-       * add-row attaches events to newly created inputs
-      */
-      this.dispatchEvent(
-        new CustomEvent('add-row', {
-          detail:{
-            name: this.name,
-            rowIndex: this.rowData.length - 1,
-            nodes: newNodes
-          },
-          composed: true,
-          bubbles: true,
-        })
-      );
-    }
-
-    this.fieldNodes = Array.from(currentNodes);
-  }
-
   /**
    * Removes row based on the index of the row
    */
   removeRow(event: any) {
-    console.log(event.originalTarget.parentNode.dataset.rowNum);
-    // this.rowData.splice(index, 1);
-    // console.log(this.rowData);
-
+    console.log(event);
+    // remove-row splices the appropriate data from skhemata-form data property
     this.dispatchEvent(
       new CustomEvent('remove-row', {
         detail:{
@@ -158,11 +107,51 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
     ];
   }
 
-  renderComponent (name: String, attributes: Object, value: any = null) {
+  /**
+   * Renders component based on repeatedFields object
+   * @param name 
+   * @param attributes 
+   * @param value 
+   * @param content content that is inserted to <slot></slot>
+   * @returns HtmlTemplate
+   */
+  renderComponent (name: String, attributes: Object, value: any = '', content: String = '') {
     const templateString = `<${name} ${Object.keys(attributes).map(key => {
       return `${key}=${attributes[key]}`;
-    }).join(' ')} value=${value} skhemata-input></${name}>`;
+    }).join(' ')} value="${value}" ${value == true ? 'checked="true"' : ''} skhemata-input>${content}</${name}>`;
     return html`${unsafeHTML(templateString)}`;
+  }
+
+  /**
+   * Life cycle method that triggers whenever updated
+   * if there are new rows added, trigger add row event
+   */
+   updated() {
+    const currentNodes = this.shadowRoot.querySelectorAll('[skhemata-input]');
+
+    if(currentNodes.length > this.fieldNodes.length) {
+      // Filter out previous nodes from currentNodes
+      const newNodes = Array.from(currentNodes).filter(node => !this.fieldNodes.includes(node));
+
+      /**
+       * Dispatch the add-row event
+       * add-row attaches eventlisteners to newly created inputs
+      */
+      this.dispatchEvent(
+        new CustomEvent('add-row', {
+          detail:{
+            name: this.name,
+            rowIndex: this.rowData.length - 1,
+            nodes: newNodes
+          },
+          composed: true,
+          bubbles: true,
+        })
+      );
+    }
+    
+    // Save the current nodes as previous nodes
+    this.fieldNodes = Array.from(currentNodes);
   }
 
   render() {
@@ -184,7 +173,7 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
             <h3>${this.rowName} #${i + 1}</h3>
           ${
             this.repeatedFields.map( (field, j) =>  
-              html`${field.type in this.allowedComponents ? this.renderComponent(this.allowedComponents[field.type], field.attributes, data[field.attributes.name]) : ''}`
+              html`${field.type in this.allowedComponents ? this.renderComponent(this.allowedComponents[field.type], field.attributes, data[field.attributes.name], field.content) : ''}`
             )
           }<button class="button is-danger" @click=${(e) => this.removeRow(e)}>${this.removeRowButtonText}</button><hr></div>`)
         }
