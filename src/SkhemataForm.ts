@@ -34,6 +34,7 @@ export class SkhemataForm extends SkhemataBase {
             node => node.nodeType === Node.ELEMENT_NODE
           )
         : [];
+
       if (element.name || (!element.name && elementChildren.length < 1)) {
         if (element.tagName && element.tagName !== 'SLOT') {
           elements.push(element);
@@ -118,13 +119,89 @@ export class SkhemataForm extends SkhemataBase {
         );
         this.requestUpdate('data', oldValue);
       });
+
+      // add-row event for skhemata-form-repeat inputs
+      if(input.type == 'SKHEMATA-FORM-REPEAT') {
+        
+        input.addEventListener('add-row', (e: any) => {
+          const repeaterName = e.detail.name;
+          const rowIndex = e.detail.rowIndex;
+
+          if(!this.data.hasOwnProperty(repeaterName)) {
+            this.data[repeaterName] = [];
+          }
+
+          if(!this.data[repeaterName][rowIndex]) {
+            this.data[repeaterName][rowIndex] = {};
+          }
+
+          // attaches 'change' event listeners to all the child elements of repeater
+          for (const repeatInput of e.detail.nodes) {
+            repeatInput.addEventListener('change', (event: any) => {
+              const { name, value } = event.detail;
+              const oldValue = this.data;
+
+              this.data[repeaterName][rowIndex][name] = value;
+              this.valid = true;
+              input.dispatchEvent(
+                new CustomEvent('update-data', {
+                  detail: {
+                    data: this.data,
+                  },
+                })
+              );
+
+              this.dispatchEvent(
+                new CustomEvent('change', {
+                  detail: {
+                    data: this.data,
+                  },
+                })
+              );
+              this.requestUpdate('data', oldValue);
+            });
+          }
+
+        });
+
+        input.addEventListener('remove-row', (e: any) => {
+          const repeaterName = e.detail.name;
+          const rowIndex = e.detail.rowIndex;
+
+          const oldValue = this.data;
+  
+          if(this.data.hasOwnProperty(repeaterName)) {
+            if(this.data[repeaterName][rowIndex]) {
+              this.data[repeaterName].splice(rowIndex, 1);
+            }
+          }
+
+          this.valid = true;
+          input.dispatchEvent(
+            new CustomEvent('update-data', {
+              detail: {
+                data: this.data,
+              },
+            })
+          );
+          this.dispatchEvent(
+            new CustomEvent('change', {
+              detail: {
+                data: this.data,
+              },
+            })
+          );
+          this.requestUpdate('data', oldValue);
+
+        });
+      }
     }
   }
 
   render() {
     return html`
       <div class="${this.columns ? 'columns' : ''}">
-        <slot> </slot>
+        <slot form-data=${this.data}> </slot>
       </div>
     `;
   }

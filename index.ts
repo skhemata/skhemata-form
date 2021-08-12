@@ -6,5 +6,7 @@ export { SkhemataFormTextarea } from './src/SkhemataFormTextarea';
 export { SkhemataFormDropdown } from './src/SkhemataFormDropdown';
 export { SkhemataFormDropzone } from './src/SkhemataFormDropzone';
 export { SkhemataFormQuill } from './src/SkhemataFormQuill';
+export { SkhemataFormToggle } from './src/SkhemataFormToggle';
+export { SkhemataFormRepeat } from './src/SkhemataFormRepeat';
 export { SkhemataFormButton } from './src/SkhemataFormButton';
 export { SkhemataFormAutocomplete } from './src/SkhemataFormAutocomplete';
