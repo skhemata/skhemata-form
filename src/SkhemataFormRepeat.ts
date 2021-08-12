@@ -57,6 +57,7 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
     // Event listener that updates local state based on skhemata-form state
     this.addEventListener('update-data', (e: any) => {
       this.rowData = e.detail.data[this.name];
+      this.value = this.rowData;
     });
   }
 

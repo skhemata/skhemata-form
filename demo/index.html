@@ -78,13 +78,13 @@
             <option value="goodbye">Goodbye</option>
           </skhemata-form-dropdown> 
           <skhemata-form-checkbox label="checkbox" name="check" required >Sample checkbox</skhemata-form-checkbox>
-          <skhemata-form-repeat label="repeater" name="repeat" .repeatedFields=${repeatedFields} rowName="repeat-row" addRowButtonText="Add a new row" removeRowButtonText="remove row" rowLimit="3" description="description" required>
+          <skhemata-form-repeat label="repeater" name="repeat" .repeatedFields=${repeatedFields} rowName="repeat-row" addRowButtonText="Add a new row" removeRowButtonText="remove row" rowLimit="3" description="description">
 
           </skhemata-form-repeat>
 
           <skhemata-form-toggle label="toggle" name="toggle" onText="ON" offText="OFF" required >Sample toggle</skhemata-form-toggle>
           <skhemata-form-autocomplete label="Auto Complete" name="autocomplete" api=${JSON.stringify({url : 'https://coral.thrinacia.com/api/service/restv1/'})} maplabel="name" mapvalue="id"></skhemata-form-autocomplete>
-          <skhemata-form-button type="submit" title="Submit"></skhemata-form-button>
+          <skhemata-form-button type="submit" title="Submit">Submit</skhemata-form-button>
 
         </skhemata-form>
 
