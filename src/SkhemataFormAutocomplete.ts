@@ -165,7 +165,7 @@ export class SkhemataFormAutocomplete extends SkhemataFormInput {
 
   handleInput(event: any) {
     this.clearError();
-    this.setAttribute('search', event.target.value);
+    this.setAttribute('search', event.originalTarget.value);
     if (this.search.length > 2) {
       this.getResults();
     }

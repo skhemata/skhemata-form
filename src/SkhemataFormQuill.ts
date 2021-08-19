@@ -73,7 +73,7 @@ export class SkhemataFormQuill extends SkhemataFormInput {
   render() {
     const horizontalFieldLabel = html`
       <div class="field-label column is-one-quarter" style="text-align: left">
-        ${this.label ? html`<label class="label">${this.label}</label>` : null}
+        ${this.label ? html`<label class="label">${this.label} ${this.required ? html`<span style="color: red">*</span>` : null}</label>` : null}
         ${this.description ? html`<p>${this.description}</p>` : null}
       </div>
     `;
@@ -84,7 +84,7 @@ export class SkhemataFormQuill extends SkhemataFormInput {
         <div class="field-body column">
           <div class="field">
             ${this.label && !this.horizontal
-              ? html`<label class="label">${this.label}</label>`
+              ? html`<label class="label">${this.label} ${this.required ? html`<span style="color: red">*</span>` : null}</label>`
               : null}
             <div class="control ${this.valid ? '' : 'has-icons-right'}">
               ${this.description && !this.horizontal
