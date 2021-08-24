@@ -120,7 +120,7 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
    */
   renderComponent (name: String, attributes: Object, value: any = '', content: String = '') {
     const templateString = `<${name} ${Object.keys(attributes).map(key => {
-      return `${key}=${attributes[key]}`;
+      return `${key}="${attributes[key]}"`;
     }).join(' ')} value="${value}" ${value == true ? 'checked="true"' : ''} skhemata-input>${content}</${name}>`;
     return html`${unsafeHTML(templateString)}`;
   }

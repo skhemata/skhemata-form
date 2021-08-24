@@ -122,7 +122,7 @@ export class SkhemataFormDropdown extends SkhemataFormInput {
         this.value = children[0].value;
       }
     } else if (value) {
-      const initialOption = children.filter(child => child.value === value)[0];
+      const initialOption = children.filter(child => child.value == value)[0];
       this.value = initialOption?.value;
       this.selected = initialOption?.innerHTML;
     } else {
@@ -133,8 +133,9 @@ export class SkhemataFormDropdown extends SkhemataFormInput {
   }
 
   async firstUpdated() {
-    await super.firstUpdated();
     this.setDefaultValue(this.value);
+    await super.firstUpdated();
+
   }
 
   handleKeydown(event: any) {
