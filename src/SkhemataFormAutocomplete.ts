@@ -60,8 +60,6 @@ export class SkhemataFormAutocomplete extends SkhemataFormInput {
     };
   }
 
-  @property({ type: Boolean }) horizontal = false;
-
   @property({ type: String }) description = '';
 
   @property({ type: String }) selected = '';

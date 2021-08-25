@@ -3,6 +3,7 @@ import { SkhemataEditorQuill } from '@skhemata/skhemata-editor-quill';
 import { SkhemataFormInput } from './SkhemataFormInput';
 
 export class SkhemataFormQuill extends SkhemataFormInput {
+  @property({ type: Number }) campaignId;
   static get styles() {
     return <CSSResult[]>[
       ...super.styles,
@@ -53,7 +54,8 @@ export class SkhemataFormQuill extends SkhemataFormInput {
 
   async firstUpdated() {
     await super.firstUpdated();
-    this.editor = this?.shadowRoot?.getElementById('editor');
+    this.editor = this.shadowRoot.getElementById('editor');
+
     this.editor.updateComplete.then(() => {
       this.initQuill();
     });
@@ -61,10 +63,17 @@ export class SkhemataFormQuill extends SkhemataFormInput {
 
   initQuill() {
     if(this.value) {
-      const delta = JSON.parse(this.value)?.ops;
-      this.editor.setContents(delta);
+      // const delta = JSON.parse(this.value)?.ops;
+      // this.editor.setContents(delta);
+      console.log(this.editor);
+      const delta = this.editor.quill?.clipboard.convert(this.value)
+      this.editor.quill.setContents(delta, 'silent');
+
+      // quill.setContents(delta, 'silent')
+
     }
-    this.editor.quill.on('text-change', () => {
+
+    this.editor.quill?.on('text-change', () => {
       this.value = JSON.stringify(this.editor.quill.getContents());
       console.log(this.value);
     });
@@ -90,7 +99,7 @@ export class SkhemataFormQuill extends SkhemataFormInput {
               ${this.description && !this.horizontal
                 ? html`<p>${this.description}</p>`
                 : null}
-              <sk-quill id="editor"></sk-quill>
+              <sk-quill id="editor" campaignId="${this.campaignId}" .api=${this.api} ></sk-quill>
             </div>
             ${!this.valid
               ? html`<p class="help ${this.helpClass}">${this.errorMessage}</p>`

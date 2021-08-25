@@ -33,10 +33,11 @@
     "@power-elements/stripe-elements": "^2.3.8",
     "@riovir/wc-fontawesome": "^0.1.6",
     "@skhemata/skhemata-base": "^1.1.0",
-    "@skhemata/skhemata-editor-quill": "^0.1.1",
+    "@skhemata/skhemata-editor-quill": "^0.1.4",
     "@spectrum-web-components/dropzone": "^0.7.4",
     "@spectrum-web-components/illustrated-message": "^0.6.5",
     "@spectrum-web-components/link": "^0.8.4",
+    "bulma-calendar": "^6.1.12",
     "lit-html": "^2.0.0-rc.3",
     "parchment": "^2.0.0-dev.2"
   },

@@ -29,9 +29,7 @@ export class SkhemataFormDropzone extends SkhemataFormInput {
           border-radius: 4px;
           background: transparent;
         }
-        .message {
-          width: max-content;
-        }
+    
         #dropzone {
           border: none;
         }

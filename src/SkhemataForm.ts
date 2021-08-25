@@ -99,7 +99,7 @@ export class SkhemataForm extends SkhemataBase {
   async firstUpdated() {
     await super.firstUpdated(); 
     for (const input of this.inputs) {
-      input.horizontal = this.horizontal;
+      // input.horizontal = this.horizontal;
       input.translations = this.translations;
       input.addEventListener('submit', () => {
         this.handleSubmit();
