@@ -10,3 +10,5 @@ export { SkhemataFormToggle } from './src/SkhemataFormToggle';
 export { SkhemataFormRepeat } from './src/SkhemataFormRepeat';
 export { SkhemataFormButton } from './src/SkhemataFormButton';
 export { SkhemataFormAutocomplete } from './src/SkhemataFormAutocomplete';
+export { SkhemataFormDatePicker } from './src/SkhemataFormDatePicker';
+export { SkhemataFormTime } from './src/SkhemataFormTime';

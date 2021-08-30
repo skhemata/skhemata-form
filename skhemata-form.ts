@@ -9,7 +9,8 @@ import { SkhemataFormCheckbox } from './src/SkhemataFormCheckbox';
 import { SkhemataFormAutocomplete } from './src/SkhemataFormAutocomplete';
 import { SkhemataFormToggle } from './src/SkhemataFormToggle';
 import { SkhemataFormRepeat } from './src/SkhemataFormRepeat';
-
+import { SkhemataFormDatePicker } from './src/SkhemataFormDatePicker';
+import { SkhemataFormTime } from './src/SkhemataFormTime';
 
 
 window.customElements.define('skhemata-form', SkhemataForm);
@@ -18,7 +19,8 @@ window.customElements.define('skhemata-form-textarea', SkhemataFormTextarea);
 window.customElements.define('skhemata-form-checkbox', SkhemataFormCheckbox);
 window.customElements.define('skhemata-form-toggle', SkhemataFormToggle);
 window.customElements.define('skhemata-form-repeat', SkhemataFormRepeat);
-
+window.customElements.define('skhemata-form-date-picker', SkhemataFormDatePicker);
+window.customElements.define('skhemata-form-time', SkhemataFormTime);
 
 window.customElements.define('skhemata-form-dropdown', SkhemataFormDropdown);
 window.customElements.define('skhemata-form-dropzone', SkhemataFormDropzone);

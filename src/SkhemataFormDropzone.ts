@@ -91,6 +91,7 @@ export class SkhemataFormDropzone extends SkhemataFormInput {
                       @click=${() => {
                         this.value = null;
                         this.imageurl = null;
+                        this.requestUpdate();                        
                       }}
                     ></button>
                   </div>
