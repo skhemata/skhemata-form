@@ -67,13 +67,11 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
   async firstUpdated() {
     await super.firstUpdated(); 
     this.value = this.rowData;
-    console.log(this.value)
 
     const currentNodes = this.shadowRoot.querySelectorAll('[data-row-num]');
-    
+
     currentNodes.forEach((row, index) => {
       const nodes = row.querySelectorAll('[skhemata-input]');
-      console.log(nodes)
 
       this.dispatchEvent(
         new CustomEvent('add-row', {
@@ -166,28 +164,35 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
    */
    updated() {
     const currentNodes = this.shadowRoot.querySelectorAll('[skhemata-input]');
-    if(currentNodes.length > this.fieldNodes.length) {
-
-      // Filter out previous nodes from currentNodes
-      const newNodes = Array.from(currentNodes).filter(node => !this.fieldNodes.includes(node));
-
-      /**
-       * Dispatch the add-row event
-       * add-row attaches eventlisteners to newly created inputs
-      */
-      this.dispatchEvent(
-        new CustomEvent('add-row', {
-          detail:{
-            name: this.name,
-            rowIndex: this.rowData?.length - 1,
-            nodes: newNodes
-          },
-          composed: true,
-          bubbles: true,
-        })
-      );
-    }
+    // check if last row of rowdata is blank
+    if(this.rowData != undefined) {
+      if(this.rowData[this.rowData.length - 1] != undefined) {
+        if(Object.keys(this.rowData[this.rowData.length - 1]).length == 0) {
+          if(currentNodes.length > this.fieldNodes.length) {
     
+            // Filter out previous nodes from currentNodes
+            const newNodes = Array.from(currentNodes).filter(node => !this.fieldNodes.includes(node));
+      
+            /**
+             * Dispatch the add-row event
+             * add-row attaches eventlisteners to newly created inputs
+            */
+            this.dispatchEvent(
+              new CustomEvent('add-row', {
+                detail:{
+                  name: this.name,
+                  rowIndex: this.rowData?.length - 1,
+                  nodes: newNodes
+                },
+                composed: true,
+                bubbles: true,
+              })
+            );
+          }
+        }
+      }
+    } 
+ 
     // Save the current nodes as previous nodes
     this.fieldNodes = Array.from(currentNodes);
   }
@@ -211,7 +216,7 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
             <h3>${this.rowName} #${i + 1}</h3>
           ${
             this.repeatedFields.map( (field, j) =>  
-              html`${field.type in this.allowedComponents ? this.renderComponent(this.allowedComponents[field.type], field.attributes, data[field.attributes.name], field.content) : ''}`
+              html`${field.type in this.allowedComponents ? this.renderComponent(this.allowedComponents[field.type], {...field.attributes, 'row-index': i}, data[field.attributes.name], field.content) : ''}`
             )
           }<button class="button is-danger" @click=${(e) => this.removeRow(e)}>${this.removeRowButtonText}</button><hr></div>`)
         }

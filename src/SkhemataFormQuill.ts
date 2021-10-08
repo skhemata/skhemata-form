@@ -65,17 +65,16 @@ export class SkhemataFormQuill extends SkhemataFormInput {
     if(this.value) {
       // const delta = JSON.parse(this.value)?.ops;
       // this.editor.setContents(delta);
-      console.log(this.editor);
       const delta = this.editor.quill?.clipboard.convert(this.value)
       this.editor.quill.setContents(delta, 'silent');
-
-      // quill.setContents(delta, 'silent')
 
     }
 
     this.editor.quill?.on('text-change', () => {
-      this.value = JSON.stringify(this.editor.quill.getContents());
-      console.log(this.value);
+      // this.value = JSON.stringify(this.editor.quill.getContents());
+
+      this.value = this.editor.quill.root.innerHTML;
+
     });
   }
 

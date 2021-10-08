@@ -37,7 +37,6 @@
     "@spectrum-web-components/dropzone": "^0.7.4",
     "@spectrum-web-components/illustrated-message": "^0.6.5",
     "@spectrum-web-components/link": "^0.8.4",
-    "bulma-calendar": "^6.1.12",
     "lit-html": "^2.0.0-rc.3",
     "parchment": "^2.0.0-dev.2"
   },

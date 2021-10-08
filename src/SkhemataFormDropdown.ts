@@ -182,7 +182,7 @@ export class SkhemataFormDropdown extends SkhemataFormInput {
                 aria-haspopup="true"
                 aria-controls="dropdown-menu"
               >
-                <span>${this.selected}</span>
+                <span>${this.selected || this.placeholder}</span>
                 <span class="icon is-small">
                   <fa-icon .icon=${faAngleDown}></fa-icon>
                 </span>
