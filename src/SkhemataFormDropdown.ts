@@ -113,7 +113,7 @@ export class SkhemataFormDropdown extends SkhemataFormInput {
       this.placeholder = '';
       if (value) {
         const initialOption = children.filter(
-          child => child.value === value
+          child => child.value == value
         )[0];
         this.value = initialOption?.value;
         this.selected = initialOption?.innerHTML;
@@ -122,7 +122,7 @@ export class SkhemataFormDropdown extends SkhemataFormInput {
         this.value = children[0].value;
       }
     } else if (value) {
-      const initialOption = children.filter(child => child.value === value)[0];
+      const initialOption = children.filter(child => child.value == value)[0];
       this.value = initialOption?.value;
       this.selected = initialOption?.innerHTML;
     } else {
@@ -133,8 +133,9 @@ export class SkhemataFormDropdown extends SkhemataFormInput {
   }
 
   async firstUpdated() {
-    await super.firstUpdated();
     this.setDefaultValue(this.value);
+    await super.firstUpdated();
+
   }
 
   handleKeydown(event: any) {
@@ -162,7 +163,7 @@ export class SkhemataFormDropdown extends SkhemataFormInput {
     const field = html`
       <div class="field">
         ${this.label && !this.horizontal
-          ? html`<label class="label">${this.label}</label>`
+          ? html`<label class="label">${this.label} ${this.required ? html`<span style="color: red">*</span>` : null}</label>`
           : null}
         <div class="control ${this.valid ? '' : 'has-icons-right'}">
           ${this.description && !this.horizontal
@@ -181,7 +182,7 @@ export class SkhemataFormDropdown extends SkhemataFormInput {
                 aria-haspopup="true"
                 aria-controls="dropdown-menu"
               >
-                <span>${this.selected}</span>
+                <span>${this.selected || this.placeholder}</span>
                 <span class="icon is-small">
                   <fa-icon .icon=${faAngleDown}></fa-icon>
                 </span>
@@ -214,7 +215,7 @@ export class SkhemataFormDropdown extends SkhemataFormInput {
 
     const horizontalFieldLabel = html`
       <div class="field-label column is-one-quarter" style="text-align: left">
-        ${this.label ? html`<label class="label">${this.label}</label>` : null}
+        ${this.label ? html`<label class="label">${this.label} ${this.required ? html`<span style="color: red">*</span>` : null}</label>` : null}
         ${this.description ? html`<p>${this.description}</p>` : null}
       </div>
     `;

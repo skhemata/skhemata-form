@@ -98,9 +98,8 @@ export class SkhemataForm extends SkhemataBase {
 
   async firstUpdated() {
     await super.firstUpdated(); 
-    console.log(this.inputs)
     for (const input of this.inputs) {
-      input.horizontal = this.horizontal;
+      // input.horizontal = this.horizontal;
       input.translations = this.translations;
       input.addEventListener('submit', () => {
         this.handleSubmit();
@@ -140,8 +139,8 @@ export class SkhemataForm extends SkhemataBase {
             repeatInput.addEventListener('change', (event: any) => {
               const { name, value } = event.detail;
               const oldValue = this.data;
-
-              this.data[repeaterName][rowIndex][name] = value;
+              const inputRowIndex = repeatInput.attributes['row-index'].value;
+              this.data[repeaterName][inputRowIndex][name] = value;
               this.valid = true;
               input.dispatchEvent(
                 new CustomEvent('update-data', {

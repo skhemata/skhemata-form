@@ -5,6 +5,9 @@ import { IllustratedMessage } from '@spectrum-web-components/illustrated-message
 import { SkhemataFormInput } from './SkhemataFormInput';
 
 export class SkhemataFormDropzone extends SkhemataFormInput {
+  
+  @property({type: String }) imageurl = "";
+
   static get scopedElements() {
     return {
       'sp-dropzone': Dropzone,
@@ -26,9 +29,7 @@ export class SkhemataFormDropzone extends SkhemataFormInput {
           border-radius: 4px;
           background: transparent;
         }
-        .message {
-          width: max-content;
-        }
+    
         #dropzone {
           border: none;
         }
@@ -81,14 +82,16 @@ export class SkhemataFormDropzone extends SkhemataFormInput {
             ? html`<p class="description">${this.description}</p>`
             : null}
           <div class="message">
-            ${this.value
+            ${this.value || this.imageurl
               ? html`
                   <div class="message-header">
-                    ${this.value.name}
+                    ${this.value ? this.value.name : ''}
                     <button
                       class="delete"
                       @click=${() => {
                         this.value = null;
+                        this.imageurl = null;
+                        this.requestUpdate();                        
                       }}
                     ></button>
                   </div>
@@ -100,9 +103,9 @@ export class SkhemataFormDropzone extends SkhemataFormInput {
                 tabindex="0"
                 @sp-dropzone-drop=${this.handleFileUpload}
               >
-                ${this.value
+                ${this.value || this.imageurl
                   ? html`<img
-                      src=${URL.createObjectURL(this.value)}
+                      src=${this.value ? URL.createObjectURL(this.value) : this.imageurl}
                       alt=${this.name}
                     />`
                   : html`

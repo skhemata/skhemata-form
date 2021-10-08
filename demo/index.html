@@ -60,7 +60,19 @@
       content: '<option value="hello">Hello</option><option value="goodbye">Goodbye</option>'
     }
   ];
+  
+    const api = {
+      url: 'https://coral.thrinacia.com/api/service/restv1',
+      base: 'https://coral.thrinacia.com/api'
+    };
+    const campaignId = 2;
 
+    const date = new Date();
+    const today = date.toISOString().split('T')[0]
+
+    const rowData = [
+      {toggle: 1, check: 1, dropdown: 'hello'}
+    ];
     render(
       html`
       <div class="form">
@@ -72,16 +84,17 @@
           <skhemata-form-textbox class="column" label="Search" required minlength=10 name="searchinput" type="search"></skhemata-form-textbox>
           <skhemata-form-textarea class="column" label="Area"></skhemata-form-textarea>
           <skhemata-form-textbox class="column" label="Div" name="divinput"></skhemata-form-textbox>
-          <skhemata-form-quill class="column" label="Quill Editor" name="quill"></skhemata-form-quill>
+          <skhemata-form-quill class="column" label="Quill Editor" name="quill" .api=${api} campaignId=${campaignId}></skhemata-form-quill>
           <skhemata-form-dropdown label="Dropdown" name="dropdown" placeholder="" required  description="This is a dropdown">
             <option value="hello">Hello</option>
             <option value="goodbye">Goodbye</option>
           </skhemata-form-dropdown> 
-          <skhemata-form-checkbox label="checkbox" name="check" required >Sample checkbox</skhemata-form-checkbox>
-          <skhemata-form-repeat label="repeater" name="repeat" .repeatedFields=${repeatedFields} rowName="repeat-row" addRowButtonText="Add a new row" removeRowButtonText="remove row" rowLimit="3" description="description">
-
+          <skhemata-form-checkbox label="checkbox" name="check" description="sample Check" required >Sample checkbox</skhemata-form-checkbox>
+          <skhemata-form-repeat label="repeater" name="repeat" description="Sample Repeat" .repeatedFields=${repeatedFields} rowName="repeat-row" addRowButtonText="Add a new row" removeRowButtonText="remove row" rowLimit="3" .rowData=${rowData}>
           </skhemata-form-repeat>
 
+          <skhemata-form-date-picker label="date picker" name="date-picker" description="sample date picker" value=${today}>
+          </skhemata-form-date-picker>
           <skhemata-form-toggle label="toggle" name="toggle" onText="ON" offText="OFF" required >Sample toggle</skhemata-form-toggle>
           <skhemata-form-autocomplete label="Auto Complete" name="autocomplete" api=${JSON.stringify({url : 'https://coral.thrinacia.com/api/service/restv1/'})} maplabel="name" mapvalue="id"></skhemata-form-autocomplete>
           <skhemata-form-button type="submit" title="Submit">Submit</skhemata-form-button>

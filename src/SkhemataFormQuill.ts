@@ -3,6 +3,7 @@ import { SkhemataEditorQuill } from '@skhemata/skhemata-editor-quill';
 import { SkhemataFormInput } from './SkhemataFormInput';
 
 export class SkhemataFormQuill extends SkhemataFormInput {
+  @property({ type: Number }) campaignId;
   static get styles() {
     return <CSSResult[]>[
       ...super.styles,
@@ -53,7 +54,8 @@ export class SkhemataFormQuill extends SkhemataFormInput {
 
   async firstUpdated() {
     await super.firstUpdated();
-    this.editor = this?.shadowRoot?.getElementById('editor');
+    this.editor = this.shadowRoot.getElementById('editor');
+
     this.editor.updateComplete.then(() => {
       this.initQuill();
     });
@@ -61,45 +63,59 @@ export class SkhemataFormQuill extends SkhemataFormInput {
 
   initQuill() {
     if(this.value) {
-      const delta = JSON.parse(this.value)?.ops;
-      this.editor.setContents(delta);
+      // const delta = JSON.parse(this.value)?.ops;
+      // this.editor.setContents(delta);
+      const delta = this.editor.quill?.clipboard.convert(this.value)
+      this.editor.quill.setContents(delta, 'silent');
+
     }
-    this.editor.quill.on('text-change', () => {
-      this.value = JSON.stringify(this.editor.quill.getContents());
-      console.log(this.value);
+
+    this.editor.quill?.on('text-change', () => {
+      // this.value = JSON.stringify(this.editor.quill.getContents());
+
+      this.value = this.editor.quill.root.innerHTML;
+
     });
   }
 
   render() {
-    const horizontalFieldLabel = html`
-      <div class="field-label column is-one-quarter" style="text-align: left">
-        ${this.label ? html`<label class="label">${this.label}</label>` : null}
-        ${this.description ? html`<p>${this.description}</p>` : null}
-      </div>
-    `;
 
     const field = html`
-      <div class="field  ${this.horizontal ? 'is-horizontal' : ''}">
-        ${(this.label || this.description) && this.horizontal ? horizontalFieldLabel : null}
-        <div class="field-body column">
-          <div class="field">
-            ${this.label && !this.horizontal
-              ? html`<label class="label">${this.label}</label>`
-              : null}
-            <div class="control ${this.valid ? '' : 'has-icons-right'}">
-              ${this.description && !this.horizontal
-                ? html`<p>${this.description}</p>`
-                : null}
-              <sk-quill id="editor"></sk-quill>
-            </div>
-            ${!this.valid
-              ? html`<p class="help ${this.helpClass}">${this.errorMessage}</p>`
-              : ``}
+    <div class="field">
+        ${this.label && !this.horizontal
+          ? html`<label class="label">${this.label} ${this.required ? html`<span style="color: red">*</span>` : null}</label>`
+          : null}
+        <div
+          class="control"
+        >
+          ${this.description && !this.horizontal
+            ? html`<p>${this.description}</p>`
+            : null}
+            <sk-quill id="editor" campaignId="${this.campaignId}" .api=${this.api} ></sk-quill>
           </div>
-        </div>
+        ${!this.valid
+          ? html`<p class="help ${this.helpClass}">${this.errorMessage}</p>`
+          : ``}
+      </div>
+
+    `;
+    const horizontalFieldLabel = html`
+    <div class="field-label column is-one-quarter" style="text-align: left">
+      ${this.label ? html`<label class="label">${this.label} ${this.required ? html`<span style="color: red">*</span>` : null}</label>` : null}
+      ${this.description ? html`<p>${this.description}</p>` : null}
+    </div>
+  `;
+
+    const horizontalField = html`
+      <div class="field is-horizontal">
+        ${this.label || this.description ? horizontalFieldLabel : null}
+        <div class="field-body column">${field}</div>
       </div>
     `;
 
-    return field;
+
+
+    return this.horizontal ? horizontalField : field;
+
   }
 }

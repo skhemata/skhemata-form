@@ -54,7 +54,8 @@ export abstract class SkhemataFormInput extends SkhemataBase {
 
   @property({ type: String }) label = '';
 
-  @property({ type: Boolean }) horizontal = false;
+  @property({ type: Boolean, attribute: 'horizontal', reflect: true })
+  horizontal = false;
 
   @property({ type: String }) description = '';
 
