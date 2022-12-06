@@ -37,6 +37,9 @@ export class SkhemataFormAutocomplete extends SkhemataFormInput {
         .dropdown button span {
           margin-right: auto;
         }
+        .selected-dropdown {
+          color: rgb(54, 54, 54);
+        }
         .dropdown .button {
           color: #d0d0d0;
         }
@@ -163,7 +166,7 @@ export class SkhemataFormAutocomplete extends SkhemataFormInput {
 
   handleInput(event: any) {
     this.clearError();
-    this.setAttribute('search', event.originalTarget.value);
+    this.setAttribute('search', event.target.value);
     if (this.search.length > 2) {
       this.getResults();
     }
@@ -232,7 +235,7 @@ export class SkhemataFormAutocomplete extends SkhemataFormInput {
                   if (event.keyCode === '13') this.toggleMenu();
                 }}
               >
-                <span>${this.selected || this.placeholder}</span>
+                <span class="${this.selected ? 'selected-dropdown' : ''}">${this.selected || this.placeholder}</span>
                 <span class="icon is-small">
                   <fa-icon .icon=${faAngleDown}></fa-icon>
                 </span>
