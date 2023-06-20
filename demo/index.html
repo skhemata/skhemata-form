@@ -47,7 +47,7 @@
         offText:"OFF",
         label: 'Checkbox',
         required: true
-      }    
+      }
     },
     {
       type: 'dropdown',
@@ -58,9 +58,19 @@
         required: true,
       },
       content: '<option value="hello">Hello</option><option value="goodbye">Goodbye</option>'
+    },
+    {
+      type: 'dropdown',
+      attributes: {
+        name: "dropdown",
+        description: "Do not show this dropdown",
+        label: 'Do not show',
+      },
+      hide: true,
+      content: '<option value="hello">Hello</option><option value="goodbye">Goodbye</option>'
     }
   ];
-  
+
     const api = {
       url: 'https://coral.thrinacia.com/api/service/restv1',
       base: 'https://coral.thrinacia.com/api'
@@ -88,7 +98,7 @@
           <skhemata-form-dropdown label="Dropdown" name="dropdown" placeholder="" required  description="This is a dropdown">
             <option value="hello">Hello</option>
             <option value="goodbye">Goodbye</option>
-          </skhemata-form-dropdown> 
+          </skhemata-form-dropdown>
           <skhemata-form-checkbox label="checkbox" name="check" description="sample Check" required >Sample checkbox</skhemata-form-checkbox>
           <skhemata-form-repeat label="repeater" name="repeat" description="Sample Repeat" .repeatedFields=${repeatedFields} rowName="repeat-row" addRowButtonText="Add a new row" removeRowButtonText="remove row" rowLimit="3" .rowData=${rowData}>
           </skhemata-form-repeat>

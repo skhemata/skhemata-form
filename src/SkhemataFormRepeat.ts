@@ -1,4 +1,4 @@
-import { html, property, render, css, CSSResult, unsafeHTML } from '@skhemata/skhemata-base';
+import { html, property, css, CSSResult, unsafeHTML } from '@skhemata/skhemata-base';
 import { SkhemataFormInput } from './SkhemataFormInput';
 import { SkhemataFormTextbox } from './SkhemataFormTextbox';
 import { SkhemataFormTextarea } from './SkhemataFormTextarea';
@@ -30,15 +30,15 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
 
   // Pair all component types with appropriate component
   allowedComponents = {
-    textbox: 'skhemata-form-textbox', 
-    textarea: 'skhemata-form-textarea', 
-    dropdown: 'skhemata-form-dropdown', 
-    dropzone: 'skhemata-form-dropzone', 
-    button: 'skhemata-form-button', 
-    quill: 'skhemata-form-quill', 
-    checkbox: 'skhemata-form-checkbox', 
+    textbox: 'skhemata-form-textbox',
+    textarea: 'skhemata-form-textarea',
+    dropdown: 'skhemata-form-dropdown',
+    dropzone: 'skhemata-form-dropzone',
+    button: 'skhemata-form-button',
+    quill: 'skhemata-form-quill',
+    checkbox: 'skhemata-form-checkbox',
     toggle: 'skhemata-form-toggle',
-    datepicker: 'skhemata-form-date-picker' 
+    datepicker: 'skhemata-form-date-picker'
   };
 
   static get scopedElements(){
@@ -65,7 +65,7 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
   }
 
   async firstUpdated() {
-    await super.firstUpdated(); 
+    await super.firstUpdated();
     this.value = this.rowData;
 
     const currentNodes = this.shadowRoot.querySelectorAll('[data-row-num]');
@@ -93,11 +93,11 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
 
   /**
    * Appends a new row of inputs to the end of the component
-   * 
+   *
    */
   addRow() {
     this.rowData.push({});
-  
+
     this.requestUpdate();
   }
 
@@ -138,9 +138,9 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
 
   /**
    * Renders component based on repeatedFields object
-   * @param name 
-   * @param attributes 
-   * @param value 
+   * @param name
+   * @param attributes
+   * @param value
    * @param content content that is inserted to <slot></slot>
    * @returns HtmlTemplate
    */
@@ -169,10 +169,10 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
       if(this.rowData[this.rowData.length - 1] != undefined) {
         if(Object.keys(this.rowData[this.rowData.length - 1]).length == 0) {
           if(currentNodes.length > this.fieldNodes.length) {
-    
+
             // Filter out previous nodes from currentNodes
             const newNodes = Array.from(currentNodes).filter(node => !this.fieldNodes.includes(node));
-      
+
             /**
              * Dispatch the add-row event
              * add-row attaches eventlisteners to newly created inputs
@@ -191,8 +191,8 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
           }
         }
       }
-    } 
- 
+    }
+
     // Save the current nodes as previous nodes
     this.fieldNodes = Array.from(currentNodes);
   }
@@ -215,8 +215,8 @@ export class SkhemataFormRepeat extends SkhemataFormInput {
           this.rowData?.map((data, i) => html`<div data-row-num=${i}>
             <h3>${this.rowName} #${i + 1}</h3>
           ${
-            this.repeatedFields.map( (field, j) =>  
-              html`${field.type in this.allowedComponents ? this.renderComponent(this.allowedComponents[field.type], {...field.attributes, 'row-index': i}, data[field.attributes.name], field.content) : ''}`
+            this.repeatedFields.map( (field, j) =>
+              html`${(field.type in this.allowedComponents && (field.hide === undefined || !field.hide)) ? this.renderComponent(this.allowedComponents[field.type], {...field.attributes, 'row-index': i}, data[field.attributes.name], field.content) : ''}`
             )
           }<button class="button is-danger" @click=${(e) => this.removeRow(e)}>${this.removeRowButtonText}</button><hr></div>`)
         }
