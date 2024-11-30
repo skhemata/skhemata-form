@@ -1,6 +1,6 @@
 {
   "name": "@skhemata/skhemata-form",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "Skhemata Form Web Component. This web component can be used as base web component when working with forms and inputs.",
   "author": "skhemata-form",
   "license": "https://raw.githubusercontent.com/skhemata/skhemata-form/master/LICENSE",
