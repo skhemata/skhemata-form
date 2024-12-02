@@ -30,7 +30,7 @@ if (!customElements.get('skhemata-form-toggle')) {
 if (!customElements.get('skhemata-form-repeat')) {
   window.customElements.define('skhemata-form-repeat', SkhemataFormRepeat);
 }
-if (!customElements.get('skhemata-form-date')) {
+if (!customElements.get('skhemata-form-date-picker')) {
   window.customElements.define(
     'skhemata-form-date-picker',
     SkhemataFormDatePicker
